@@ -1,0 +1,18 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "repoclue"
+version = "0.1.0"
+description = "Discover, evaluate, and organize public GitHub repositories from the command line."
+readme = "README.md"
+requires-python = ">=3.11"
+license = "MIT"
+dependencies = []
+
+[project.scripts]
+repoclue = "repoclue.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
