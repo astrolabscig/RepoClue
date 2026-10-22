@@ -1,8 +1,8 @@
 ﻿"""Command-line entry point for RepoClue."""
 
-from repoclue.github.client import GitHubClient
+import httpx
 
-VERSION = "0.1.0"
+from repoclue.github.client import GitHubClient
 
 
 def main() -> None:
@@ -22,9 +22,13 @@ def main() -> None:
 
     except ValueError as error:
         print(f"Error: {error}")
-    except Exception as error:
-        print(f"GitHub request failed: {error}")
-
+    except httpx.HTTPStatusError as error:
+        if error.response.status_code in (403, 429):
+            print("GitHub API rate limit exceeded. Please try again later.")
+        else:
+            print(f"GitHub API returned an error: {error.response.status_code} {error.response.reason_phrase}")
+    except httpx.RequestError as error:
+        print(f"Could not reach GitHub. Check your internet connection: {error}")
 
 
 if __name__ == "__main__":
